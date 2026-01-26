@@ -13,7 +13,7 @@ export class ParametresComponent implements OnInit {
   activeTab = 'compte';
 
   userData = {
-    cin: 'BB123456',
+    cin: '',
     nom: '',
     prenom: '',
     adresse: '',
@@ -30,20 +30,9 @@ export class ParametresComponent implements OnInit {
   selectedPrivilege: string = '';
   selectedUtilisateur: string = '';
 
-  groupes = [
-    { id: 1, libelle: 'Admin' },
-    { id: 2, libelle: 'User' }
-  ];
-
-  privileges = [
-    { id: 1, libelle: 'Admin' },
-    { id: 2, libelle: 'User' }
-  ];
-
-  utilisateurs = [
-    { id: 1, nom: 'Noura Hida' },
-    { id: 2, nom: 'Khadija Outalib' }
-  ];
+  groupes: any[] = [];
+  privileges: any[] = [];
+  utilisateurs: any[] = [];
 
   constructor() {}
 
