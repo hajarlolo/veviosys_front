@@ -1,0 +1,38 @@
+<div class="dashboard-wrapper">
+  <div class="stats-row">
+    <div class="stat-card">
+      <p class="label">La Technology la plus adoptée</p>
+      <p class="value blue-text">{{ mostUsedTech }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="label">L'offre la plus suivie</p>
+      <p class="value blue-text">{{ mostFollowedOffer }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="label">Total des Offres</p>
+      <p class="value big-number">{{ totalOffers }}</p>
+    </div>
+  </div>
+
+  <h2>Nos Offres:</h2>
+  <div class="grid-container">
+    <div *ngFor="let offer of offres" class="offer-card" [class.featured]="offer.popular">
+      <span *ngIf="offer.popular" class="badge">Popular</span>
+      <h3>{{ offer.nom }}</h3>
+      <div class="price">${{ offer.prix }}<span>/Month</span></div>
+      <ul>
+        <li *ngFor="let feature of offer.features">{{ feature }}</li>
+      </ul>
+      <button class="btn-main">Commander</button>
+    </div>
+  </div>
+
+  <h2>Nos Technologes:</h2>
+  <div class="grid-container">
+    <div *ngFor="let tech of techs" class="tech-card">
+      <div class="tech-icon-box"></div>
+      <h4>{{ tech.nom }}</h4>
+      <button class="btn-outline">Savoir Plus</button>
+    </div>
+  </div>
+</div>

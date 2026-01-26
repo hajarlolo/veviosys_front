@@ -1,0 +1,81 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Technologies</h2>
+    <button class="btn-add" (click)="openModal()">+ Ajouter une technologie</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filterStatus === 'Toute'" (click)="filterStatus = 'Toute'; onFilterChange()">Toute</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Disponible'" (click)="filterStatus = 'Disponible'; onFilterChange()">Disponible</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Indisponible'" (click)="filterStatus = 'Indisponible'; onFilterChange()">Indisponible</button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Prix (MAD)</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let technology of filteredTechnologies; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ technology.nom }}</td>
+          <td>{{ technology.description }}</td>
+          <td>{{ technology.prix | number: '1.2-2' }}</td>
+          <td>
+            <span [class]="'badge ' + (technology.disponible ? 'available' : 'unavailable')">
+              {{ technology.disponible ? 'Disponible' : 'Indisponible' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-edit" (click)="editTechnology(technology)">Modifier</button>
+            <button class="btn-delete" (click)="deleteTechnology(technology.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>{{ editingId ? 'Modifier une technologie' : 'Ajouter une technologie' }}</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" [(ngModel)]="newTechnology.nom" class="form-control" placeholder="Nom de la technologie">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newTechnology.description" class="form-control" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Prix (MAD) *</label>
+        <input type="number" [(ngModel)]="newTechnology.prix" class="form-control" placeholder="Prix">
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newTechnology.disponible">
+          Disponible
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-save" (click)="saveTechnology()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" [class.show]="showModal" (click)="closeModal()"></div>

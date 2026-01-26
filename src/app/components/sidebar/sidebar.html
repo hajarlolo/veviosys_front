@@ -1,0 +1,41 @@
+<div class="sidebar">
+    <div class="logo-section">
+        <img src="/logo-veviosys.png" alt="VevioSys" class="logo">
+    </div>
+
+    <nav class="menu">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+            <i class="icon-dashboard"></i> Dashboard
+        </a>
+        <a routerLink="/clients" routerLinkActive="active" class="nav-item">
+            <i class="icon-clients"></i> Clients
+        </a>
+        <a routerLink="/technologies" routerLinkActive="active" class="nav-item">
+            <i class="icon-tech"></i> Technologies
+        </a>
+        <a routerLink="/proprietes" routerLinkActive="active" class="nav-item">
+            <i class="icon-prop"></i> Proprietes
+        </a>
+        <a routerLink="/offres" routerLinkActive="active" class="nav-item">
+            <i class="icon-offers"></i> Offres
+        </a>
+        <a routerLink="/abonnements" routerLinkActive="active" class="nav-item">
+            <i class="icon-sub"></i> Abonnements
+        </a>
+    </nav>
+
+    <div class="bottom-menu">
+        <a routerLink="/parametres" routerLinkActive="active" class="nav-item">
+            <i class="icon-settings"></i> Paramètres
+        </a>
+        <a (click)="openLogoutModal()" class="nav-item logout">
+            <i class="icon-logout"></i> Se Deconnecter
+        </a>
+    </div>
+</div>
+
+<app-logout-modal 
+  [isOpen]="showLogoutModal"
+  (confirmed)="onLogoutConfirmed()"
+  (cancelled)="onLogoutCancelled()">
+</app-logout-modal>

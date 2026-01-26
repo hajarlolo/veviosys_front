@@ -1,0 +1,149 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Abonnements</h2>
+    <div class="header-actions">
+      <button class="btn-print" (click)="printSubscriptions()">Imprimer</button>
+      <button class="btn-add" (click)="openModal()">+ Ajouter un abonnement</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filterStatus === 'Toute'" (click)="filterStatus = 'Toute'; onFilterChange()">Toute</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Prix'" (click)="filterStatus = 'Prix'; onFilterChange()">prix</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Client'" (click)="filterStatus = 'Client'; onFilterChange()">Client</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Offre'" (click)="filterStatus = 'Offre'; onFilterChange()">offre</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Date'" (click)="filterStatus = 'Date'; onFilterChange()">Date</button>
+    </div>
+  </div>
+
+  <!-- Price Filter -->
+  <div class="filter-price" *ngIf="filterStatus === 'Prix'">
+    <div class="price-inputs">
+      <div class="price-group">
+        <label>Prix Min</label>
+        <input type="number" [(ngModel)]="priceMin" (input)="onFilterInputChange()" class="form-control" placeholder="0">
+      </div>
+      <div class="price-group">
+        <label>Prix Max</label>
+        <input type="number" [(ngModel)]="priceMax" (input)="onFilterInputChange()" class="form-control" placeholder="10000">
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Filter -->
+  <div class="filter-client" *ngIf="filterStatus === 'Client'">
+    <input type="text" [(ngModel)]="selectedClient" (input)="onFilterInputChange()" class="search-input" placeholder="Rechercher un client...">
+  </div>
+
+  <!-- Offer Filter -->
+  <div class="filter-offer" *ngIf="filterStatus === 'Offre'">
+    <input type="text" [(ngModel)]="selectedOffer" (input)="onFilterInputChange()" class="search-input" placeholder="Rechercher une offre...">
+  </div>
+
+  <!-- Date Filter -->
+  <div class="filter-date" *ngIf="filterStatus === 'Date'">
+    <div class="date-inputs">
+      <div class="date-group">
+        <label>Date début</label>
+        <input type="date" [(ngModel)]="dateStart" (input)="onFilterInputChange()" class="form-control">
+      </div>
+      <div class="date-group">
+        <label>Date fin</label>
+        <input type="date" [(ngModel)]="dateEnd" (input)="onFilterInputChange()" class="form-control">
+      </div>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Client</th>
+          <th>Prix (MAD)</th>
+          <th>Date</th>
+          <th>Offre</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subscription of filteredSubscriptions; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ subscription.client?.nom }}</td>
+          <td>{{ subscription.prix | number: '1.2-2' }}</td>
+          <td>{{ subscription.dateDebut | date: 'dd-MM-yyyy' }}</td>
+          <td>{{ subscription.offer?.nom }}</td>
+          <td>
+            <div class="action-icons">
+              <button class="btn-icon view" (click)="viewSubscription(subscription)" title="Voir">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+              <button class="btn-icon download" (click)="downloadSubscription(subscription)" title="Télécharger">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>{{ editingId ? 'Modifier un abonnement' : 'Ajouter un abonnement' }}</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Client *</label>
+        <select [(ngModel)]="newSubscription.client" class="form-control">
+          <option value="">Sélectionner un client</option>
+          <option *ngFor="let client of clients" [ngValue]="client">{{ client.nom }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Offre *</label>
+        <select [(ngModel)]="newSubscription.offer" class="form-control">
+          <option value="">Sélectionner une offre</option>
+          <option *ngFor="let offer of offers" [ngValue]="offer">{{ offer.nom }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date début *</label>
+        <input type="date" [(ngModel)]="newSubscription.dateDebut" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Date fin *</label>
+        <input type="date" [(ngModel)]="newSubscription.dateFin" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Prix (MAD) *</label>
+        <input type="number" [(ngModel)]="newSubscription.prix" class="form-control" placeholder="Prix">
+      </div>
+      <div class="form-group">
+        <label>Statut</label>
+        <select [(ngModel)]="newSubscription.statut" class="form-control">
+          <option value="Actif">Actif</option>
+          <option value="Inactif">Inactif</option>
+          <option value="En attente">En attente</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-save" (click)="saveSubscription()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" [class.show]="showModal" (click)="closeModal()"></div>

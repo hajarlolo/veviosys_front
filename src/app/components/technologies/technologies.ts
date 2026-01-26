@@ -1,0 +1,120 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Technology } from '../../models/technology.model';
+import { TechnologyService } from '../../services/technology';
+
+@Component({
+  selector: 'app-technologies',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './technologies.html',
+  styleUrl: './technologies.css'
+})
+export class TechnologiesComponent implements OnInit {
+  technologies: Technology[] = [];
+  filteredTechnologies: Technology[] = [];
+  showModal = false;
+  editingId: number | null = null;
+  filterStatus = 'Toute';
+  
+  newTechnology: Technology = {
+    nom: '',
+    description: '',
+    prix: 0,
+    disponible: true
+  };
+
+  constructor(private technologyService: TechnologyService) {}
+
+  ngOnInit(): void {
+    this.loadTechnologies();
+  }
+
+  loadTechnologies(): void {
+    this.technologyService.getTechnologies().subscribe({
+      next: (data) => {
+        this.technologies = data;
+        this.applyFilter();
+      },
+      error: (err) => console.error('Error loading technologies:', err)
+    });
+  }
+
+  applyFilter(): void {
+    if (this.filterStatus === 'Toute') {
+      this.filteredTechnologies = this.technologies;
+    } else if (this.filterStatus === 'Disponible') {
+      this.filteredTechnologies = this.technologies.filter(t => t.disponible);
+    } else if (this.filterStatus === 'Indisponible') {
+      this.filteredTechnologies = this.technologies.filter(t => !t.disponible);
+    }
+  }
+
+  onFilterChange(): void {
+    this.applyFilter();
+  }
+
+  openModal(): void {
+    this.resetForm();
+    this.editingId = null;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.newTechnology = {
+      nom: '',
+      description: '',
+      prix: 0,
+      disponible: true
+    };
+  }
+
+  editTechnology(technology: Technology): void {
+    this.newTechnology = { ...technology };
+    this.editingId = technology.id || null;
+    this.showModal = true;
+  }
+
+  saveTechnology(): void {
+    if (!this.newTechnology.nom.trim()) {
+      alert('Le nom est requis');
+      return;
+    }
+
+    if (this.editingId) {
+      this.technologyService.updateTechnology(this.editingId, this.newTechnology).subscribe({
+        next: () => {
+          this.loadTechnologies();
+          this.closeModal();
+        },
+        error: (err) => console.error('Error updating technology:', err)
+      });
+    } else {
+      this.technologyService.createTechnology(this.newTechnology).subscribe({
+        next: () => {
+          this.loadTechnologies();
+          this.closeModal();
+        },
+        error: (err) => console.error('Error creating technology:', err)
+      });
+    }
+  }
+
+  deleteTechnology(id: number | undefined): void {
+    if (!id) return;
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette technologie?')) {
+      this.technologyService.deleteTechnology(id).subscribe({
+        next: () => {
+          this.loadTechnologies();
+        },
+        error: (err) => console.error('Error deleting technology:', err)
+      });
+    }
+  }
+}

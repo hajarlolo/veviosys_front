@@ -1,0 +1,64 @@
+<div class="clients-page">
+  <!-- Search Bar Section -->
+  <div class="search-section">
+    <div class="search-filters">
+      <span class="filter-label">Trouver Par:</span>
+      <div class="filter-buttons">
+        <button *ngFor="let option of filterOptions" class="filter-btn" [class.active]="searchFilter === option"
+          (click)="searchFilter = option">
+          {{ option }}
+        </button>
+      </div>
+    </div>
+
+    <div class="search-input-wrapper">
+      <input type="text" class="search-input" placeholder="Votre Criteres..." [(ngModel)]="searchValue">
+      <button class="search-btn">Rechercher</button>
+    </div>
+  </div>
+
+  <!-- Client Cards Grid -->
+  <div class="client-grid">
+    <!-- Add Client Card -->
+    <div class="client-card add-client-card" (click)="onAddClient()">
+      <div class="add-icon-wrapper">
+        <div class="add-icon">+</div>
+      </div>
+      <p class="add-text">Ajouter Un Client</p>
+    </div>
+
+    <!-- Client Cards -->
+    <div class="client-card" *ngFor="let client of filteredClients">
+      <div class="card-header">
+        
+      </div>
+
+      <div class="client-avatar">
+        <img [src]="client.avatar" [alt]="client.prenom + ' ' + client.nom">
+      </div>
+
+      <h3 class="client-name">{{ client.prenom }} {{ client.nom }}</h3>
+
+      <div class="client-info">
+        <p class="client-email">{{ client.email }}</p>
+        <p class="client-phone">{{ client.telephone }}</p>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-action btn-savoir" (click)="onViewClient(client)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Savoir Plus
+        </button>
+        <button class="btn-action btn-supprimer" (click)="onDeleteClient(client)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 21l-6-6m0 0l-6-6m6 6l-6 6m6-6l6-6"></path>
+          </svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

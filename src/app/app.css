@@ -1,0 +1,17 @@
+.main-layout {
+  display: flex;
+}
+
+.main-content {
+  margin-left: 260px; /* Width of your sidebar */
+  width: calc(100% - 260px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container {
+  padding: 25px;
+  background-color: #f9f9f9;
+  flex-grow: 1;
+}

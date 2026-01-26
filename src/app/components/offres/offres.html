@@ -1,0 +1,106 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Offres</h2>
+    <button class="btn-add" (click)="openModal()">+ Ajouter une offre</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filterStatus === 'Toute'" (click)="filterStatus = 'Toute'; onFilterChange()">Toute</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Nom'" (click)="filterStatus = 'Nom'; onFilterChange()">Nom</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Prix'" (click)="filterStatus = 'Prix'; onFilterChange()">Prix</button>
+    </div>
+  </div>
+
+  <!-- Nom Search -->
+  <div class="filter-search" *ngIf="filterStatus === 'Nom'">
+    <input type="text" [(ngModel)]="searchValue" (input)="onSearchChange()" class="search-input" placeholder="Rechercher par nom ou description...">
+  </div>
+
+  <!-- Price Range Filter -->
+  <div class="filter-price" *ngIf="filterStatus === 'Prix'">
+    <div class="price-inputs">
+      <div class="price-group">
+        <label>Prix Min</label>
+        <input type="number" [(ngModel)]="priceMin" (input)="onPriceChange()" class="form-control" placeholder="0">
+      </div>
+      <div class="price-group">
+        <label>Prix Max</label>
+        <input type="number" [(ngModel)]="priceMax" (input)="onPriceChange()" class="form-control" placeholder="10000">
+      </div>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Prix (MAD)</th>
+          <th>Durée (mois)</th>
+          <th>Populaire</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let offer of filteredOffers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ offer.nom }}</td>
+          <td>{{ offer.description }}</td>
+          <td>{{ offer.prix | number: '1.2-2' }}</td>
+          <td>{{ offer.dureeMois }}</td>
+          <td>
+            <span [class]="'badge ' + (offer.populaire ? 'popular' : 'not-popular')">
+              {{ offer.populaire ? 'Oui' : 'Non' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-edit" (click)="editOffer(offer)">Modifier</button>
+            <button class="btn-delete" (click)="deleteOffer(offer.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>{{ editingId ? 'Modifier une offre' : 'Ajouter une offre' }}</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" [(ngModel)]="newOffer.nom" class="form-control" placeholder="Nom de l'offre">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newOffer.description" class="form-control" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Prix (MAD) *</label>
+        <input type="number" [(ngModel)]="newOffer.prix" class="form-control" placeholder="Prix">
+      </div>
+      <div class="form-group">
+        <label>Durée (mois) *</label>
+        <input type="number" [(ngModel)]="newOffer.dureeMois" class="form-control" placeholder="Durée en mois">
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newOffer.populaire">
+          Populaire
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-save" (click)="saveOffer()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" [class.show]="showModal" (click)="closeModal()"></div>

@@ -1,0 +1,39 @@
+.top-header {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  background-color: white;
+  border-bottom: 1px solid #ebedf3;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #3f4254;
+  font-size: 14px;
+}
+
+.user-role {
+  color: #b5b5c3;
+  font-size: 12px;
+}
+
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #f3f6f9;
+}
