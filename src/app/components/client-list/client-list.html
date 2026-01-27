@@ -64,3 +64,101 @@
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="showModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>{{ editingId ? 'Modifier un client' : 'Ajouter un client' }}</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>CIN *</label>
+        <input type="text" [(ngModel)]="newClient.cin" name="cin" class="form-control" placeholder="CIN">
+      </div>
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" [(ngModel)]="newClient.nom" name="nom" class="form-control" placeholder="Nom">
+      </div>
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input type="text" [(ngModel)]="newClient.prenom" name="prenom" class="form-control" placeholder="Prénom">
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" [(ngModel)]="newClient.email" name="email" class="form-control" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" [(ngModel)]="newClient.telephone" name="telephone" class="form-control"
+          placeholder="Téléphone">
+      </div>
+      <div class="form-group">
+        <label>Adresse</label>
+        <textarea [(ngModel)]="newClient.adresse" name="adresse" class="form-control" placeholder="Adresse"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Ville</label>
+        <input type="text" [(ngModel)]="newClient.ville" name="ville" class="form-control" placeholder="Ville">
+      </div>
+      <div class="form-group">
+        <label>Pays</label>
+        <input type="text" [(ngModel)]="newClient.pays" name="pays" class="form-control" placeholder="Pays">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-save" (click)="saveClient()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" [class.show]="showModal" (click)="closeModal()"></div>
+
+<!-- View Details Modal (Read-only) -->
+<div class="modal view-modal" [class.show]="showViewModal">
+  <div class="modal-content view-content">
+    <div class="modal-header">
+      <h3>Détails du Client</h3>
+      <button class="close-btn" (click)="closeViewModal()">&times;</button>
+    </div>
+    <div class="modal-body view-body" *ngIf="viewingClient">
+      <div class="view-group">
+        <label>CIN</label>
+        <p>{{ viewingClient.cin }}</p>
+      </div>
+      <div class="view-group">
+        <label>Nom</label>
+        <p>{{ viewingClient.nom }}</p>
+      </div>
+      <div class="view-group">
+        <label>Prénom</label>
+        <p>{{ viewingClient.prenom }}</p>
+      </div>
+      <div class="view-group">
+        <label>Email</label>
+        <p>{{ viewingClient.email }}</p>
+      </div>
+      <div class="view-group">
+        <label>Téléphone</label>
+        <p>{{ viewingClient.telephone || 'N/A' }}</p>
+      </div>
+      <div class="view-group">
+        <label>Adresse</label>
+        <p>{{ viewingClient.adresse || 'N/A' }}</p>
+      </div>
+      <div class="view-group">
+        <label>Ville</label>
+        <p>{{ viewingClient.ville || 'N/A' }}</p>
+      </div>
+      <div class="view-group">
+        <label>Pays</label>
+        <p>{{ viewingClient.pays || 'N/A' }}</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close-view" (click)="closeViewModal()">Fermer</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" [class.show]="showViewModal" (click)="closeViewModal()"></div>

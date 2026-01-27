@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Propriete } from '../../models/propriete.model';
@@ -22,13 +22,12 @@ export class ProprietesComponent implements OnInit {
   priceMax = '';
   
   newPropriete: Propriete = {
-    nom: '',
-    description: '',
+    libelle: '',
     valeur: '',
-    type: ''
+    prix: 0
   };
 
-  constructor(private proprietesService: ProprietesService) {}
+  constructor(private proprietesService: ProprietesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadProprietes();
@@ -38,7 +37,9 @@ export class ProprietesComponent implements OnInit {
     this.proprietesService.getProprietes().subscribe({
       next: (data) => {
         this.proprietes = data;
+        this.filterStatus = 'Toute'; // Set default filter
         this.applyFilter();
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading proprietes:', err)
     });
@@ -49,12 +50,12 @@ export class ProprietesComponent implements OnInit {
       this.filteredProprietes = this.proprietes;
     } else if (this.filterStatus === 'Libelle') {
       this.filteredProprietes = this.proprietes.filter(p => 
-        p.nom.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        p.description.toLowerCase().includes(this.searchValue.toLowerCase())
+        p.libelle.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        p.valeur.toLowerCase().includes(this.searchValue.toLowerCase())
       );
     } else if (this.filterStatus === 'Prix') {
       this.filteredProprietes = this.proprietes.filter(p => {
-        const prix = parseFloat(p.valeur);
+        const prix = p.prix;
         const min = this.priceMin ? parseFloat(this.priceMin) : 0;
         const max = this.priceMax ? parseFloat(this.priceMax) : Infinity;
         return prix >= min && prix <= max;
@@ -90,10 +91,9 @@ export class ProprietesComponent implements OnInit {
 
   resetForm(): void {
     this.newPropriete = {
-      nom: '',
-      description: '',
+      libelle: '',
       valeur: '',
-      type: ''
+      prix: 0
     };
   }
 
@@ -104,8 +104,8 @@ export class ProprietesComponent implements OnInit {
   }
 
   savePropriete(): void {
-    if (!this.newPropriete.nom.trim()) {
-      alert('Le nom est requis');
+    if (!this.newPropriete.libelle.trim()) {
+      alert('Le libellé est requis');
       return;
     }
 

@@ -19,7 +19,7 @@ export class TechnologyService {
 
   // Create a technology
   public createTechnology(technology: Technology): Observable<Technology> {
-    return this.http.post<Technology>(`${this.apiServerUrl}/add`, technology);
+    return this.http.post<Technology>(`${this.apiServerUrl}`, technology);
   }
 
   // Get technology by ID
@@ -29,11 +29,11 @@ export class TechnologyService {
 
   // Update a technology
   public updateTechnology(technologyId: number, technology: Technology): Observable<Technology> {
-    return this.http.put<Technology>(`${this.apiServerUrl}/update/${technologyId}`, technology);
+    return this.http.put<Technology>(`${this.apiServerUrl}/${technologyId}`, technology);
   }
 
   // Delete a technology
   public deleteTechnology(technologyId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/delete/${technologyId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${technologyId}`);
   }
 }

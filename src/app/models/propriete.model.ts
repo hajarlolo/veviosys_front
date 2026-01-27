@@ -1,7 +1,6 @@
 export interface Propriete {
   id?: number;
-  nom: string;
-  description: string;
+  libelle: string;
   valeur: string;
-  type: string;
+  prix: number;
 }

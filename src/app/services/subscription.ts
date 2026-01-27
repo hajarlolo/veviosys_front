@@ -19,7 +19,7 @@ export class SubscriptionService {
 
   // Create a subscription
   public createSubscription(subscription: Subscription): Observable<Subscription> {
-    return this.http.post<Subscription>(`${this.apiServerUrl}/add`, subscription);
+    return this.http.post<Subscription>(`${this.apiServerUrl}`, subscription);
   }
 
   // Get subscription by ID
@@ -29,11 +29,11 @@ export class SubscriptionService {
 
   // Update a subscription
   public updateSubscription(subscriptionId: number, subscription: Subscription): Observable<Subscription> {
-    return this.http.put<Subscription>(`${this.apiServerUrl}/update/${subscriptionId}`, subscription);
+    return this.http.put<Subscription>(`${this.apiServerUrl}/${subscriptionId}`, subscription);
   }
 
   // Delete a subscription
   public deleteSubscription(subscriptionId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/delete/${subscriptionId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${subscriptionId}`);
   }
 }

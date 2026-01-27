@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Technology } from '../../models/technology.model';
@@ -25,7 +25,7 @@ export class TechnologiesComponent implements OnInit {
     disponible: true
   };
 
-  constructor(private technologyService: TechnologyService) {}
+  constructor(private technologyService: TechnologyService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadTechnologies();
@@ -35,7 +35,9 @@ export class TechnologiesComponent implements OnInit {
     this.technologyService.getTechnologies().subscribe({
       next: (data) => {
         this.technologies = data;
+        this.filterStatus = 'Toute';
         this.applyFilter();
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading technologies:', err)
     });

@@ -181,7 +181,7 @@
     }
   }
 </style>
-<div class="main-layout">
+<div class="main-layout" *ngIf="!isLoginPage()">
   <app-sidebar></app-sidebar>
   
   <div class="main-content">
@@ -191,4 +191,8 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+</div>
+
+<div class="login-wrapper" *ngIf="isLoginPage()">
+  <router-outlet></router-outlet>
 </div>

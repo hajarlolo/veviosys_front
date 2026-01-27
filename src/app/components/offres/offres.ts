@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Offer } from '../../models/offer.model';
@@ -29,7 +29,7 @@ export class OffresComponent implements OnInit {
     populaire: false
   };
 
-  constructor(private offerService: OfferService) {}
+  constructor(private offerService: OfferService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadOffers();
@@ -39,7 +39,9 @@ export class OffresComponent implements OnInit {
     this.offerService.getOffers().subscribe({
       next: (data) => {
         this.offers = data;
+        this.filterStatus = 'Toute'; // Set default filter
         this.applyFilter();
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading offers:', err)
     });

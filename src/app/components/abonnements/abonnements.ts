@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from '../../models/subscription.model';
@@ -30,21 +30,23 @@ export class AbonnementsComponent implements OnInit {
   dateEnd = '';
   selectedClient = '';
   selectedOffer = '';
-  
+
   newSubscription: Subscription = {
-    client: undefined,
-    offer: undefined,
+    client: { id: 0 },
+    offer: { id: 0 },
     dateDebut: '',
     dateFin: '',
-    prix: 0,
-    statut: 'Actif'
+    confirme: false,
+    total: 0,
+    active: true
   };
 
   constructor(
     private subscriptionService: SubscriptionService,
     private clientService: ClientService,
-    private offerService: OfferService
-  ) {}
+    private offerService: OfferService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.loadSubscriptions();
@@ -56,7 +58,9 @@ export class AbonnementsComponent implements OnInit {
     this.subscriptionService.getSubscriptions().subscribe({
       next: (data) => {
         this.subscriptions = data;
+        this.filterStatus = 'Toute'; // Set default filter
         this.applyFilter();
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading subscriptions:', err)
     });
@@ -87,15 +91,15 @@ export class AbonnementsComponent implements OnInit {
       this.filteredSubscriptions = this.subscriptions.filter(s => {
         const min = this.priceMin ? parseFloat(this.priceMin) : 0;
         const max = this.priceMax ? parseFloat(this.priceMax) : Infinity;
-        return s.prix >= min && s.prix <= max;
+        return s.total >= min && s.total <= max;
       });
     } else if (this.filterStatus === 'Client') {
       this.filteredSubscriptions = this.subscriptions.filter(s =>
-        s.client?.nom.toLowerCase().includes(this.selectedClient.toLowerCase())
+        s.client?.nom?.toLowerCase().includes(this.selectedClient.toLowerCase())
       );
     } else if (this.filterStatus === 'Offre') {
       this.filteredSubscriptions = this.subscriptions.filter(s =>
-        s.offer?.nom.toLowerCase().includes(this.selectedOffer.toLowerCase())
+        s.offer?.nom?.toLowerCase().includes(this.selectedOffer.toLowerCase())
       );
     } else if (this.filterStatus === 'Date') {
       this.filteredSubscriptions = this.subscriptions.filter(s => {
@@ -139,12 +143,13 @@ export class AbonnementsComponent implements OnInit {
 
   resetForm(): void {
     this.newSubscription = {
-      client: undefined,
-      offer: undefined,
+      client: { id: 0 },
+      offer: { id: 0 },
       dateDebut: '',
       dateFin: '',
-      prix: 0,
-      statut: 'Actif'
+      confirme: false,
+      total: 0,
+      active: true
     };
   }
 
@@ -155,28 +160,26 @@ export class AbonnementsComponent implements OnInit {
   }
 
   saveSubscription(): void {
-    if (!this.newSubscription.client || !this.newSubscription.offer) {
-      alert('Veuillez sélectionner un client et une offre');
+    // Check if IDs are still 0 (the default)
+    if (this.newSubscription.client.id === 0 || this.newSubscription.offer.id === 0) {
+      alert("Veuillez sélectionner un client et une offre valides.");
       return;
     }
 
-    if (this.editingId) {
-      this.subscriptionService.updateSubscription(this.editingId, this.newSubscription).subscribe({
-        next: () => {
-          this.loadSubscriptions();
-          this.closeModal();
-        },
-        error: (err) => console.error('Error updating subscription:', err)
-      });
-    } else {
-      this.subscriptionService.createSubscription(this.newSubscription).subscribe({
-        next: () => {
-          this.loadSubscriptions();
-          this.closeModal();
-        },
-        error: (err) => console.error('Error creating subscription:', err)
-      });
-    }
+    const request = this.editingId
+      ? this.subscriptionService.updateSubscription(this.editingId, this.newSubscription)
+      : this.subscriptionService.createSubscription(this.newSubscription);
+
+    request.subscribe({
+      next: () => {
+        this.loadSubscriptions();
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        // If 400 persists, look at the "Network" tab -> "Payload" to see the JSON
+      }
+    });
   }
 
   deleteSubscription(id: number | undefined): void {
@@ -197,5 +200,13 @@ export class AbonnementsComponent implements OnInit {
 
   downloadSubscription(subscription: Subscription): void {
     console.log('Download subscription:', subscription);
+  }
+
+  onClientChange(): void {
+    console.log('Client selected:', this.newSubscription.client.id);
+  }
+
+  onOfferChange(): void {
+    console.log('Offer selected:', this.newSubscription.offer.id);
   }
 }

@@ -9,11 +9,16 @@
 
   <div class="filters">
     <div class="filter-buttons">
-      <button class="filter-btn" [class.active]="filterStatus === 'Toute'" (click)="filterStatus = 'Toute'; onFilterChange()">Toute</button>
-      <button class="filter-btn" [class.active]="filterStatus === 'Prix'" (click)="filterStatus = 'Prix'; onFilterChange()">prix</button>
-      <button class="filter-btn" [class.active]="filterStatus === 'Client'" (click)="filterStatus = 'Client'; onFilterChange()">Client</button>
-      <button class="filter-btn" [class.active]="filterStatus === 'Offre'" (click)="filterStatus = 'Offre'; onFilterChange()">offre</button>
-      <button class="filter-btn" [class.active]="filterStatus === 'Date'" (click)="filterStatus = 'Date'; onFilterChange()">Date</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Toute'"
+        (click)="filterStatus = 'Toute'; onFilterChange()">Toute</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Prix'"
+        (click)="filterStatus = 'Prix'; onFilterChange()">prix</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Client'"
+        (click)="filterStatus = 'Client'; onFilterChange()">Client</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Offre'"
+        (click)="filterStatus = 'Offre'; onFilterChange()">offre</button>
+      <button class="filter-btn" [class.active]="filterStatus === 'Date'"
+        (click)="filterStatus = 'Date'; onFilterChange()">Date</button>
     </div>
   </div>
 
@@ -22,23 +27,27 @@
     <div class="price-inputs">
       <div class="price-group">
         <label>Prix Min</label>
-        <input type="number" [(ngModel)]="priceMin" (input)="onFilterInputChange()" class="form-control" placeholder="0">
+        <input type="number" [(ngModel)]="priceMin" (input)="onFilterInputChange()" class="form-control"
+          placeholder="0">
       </div>
       <div class="price-group">
         <label>Prix Max</label>
-        <input type="number" [(ngModel)]="priceMax" (input)="onFilterInputChange()" class="form-control" placeholder="10000">
+        <input type="number" [(ngModel)]="priceMax" (input)="onFilterInputChange()" class="form-control"
+          placeholder="10000">
       </div>
     </div>
   </div>
 
   <!-- Client Filter -->
   <div class="filter-client" *ngIf="filterStatus === 'Client'">
-    <input type="text" [(ngModel)]="selectedClient" (input)="onFilterInputChange()" class="search-input" placeholder="Rechercher un client...">
+    <input type="text" [(ngModel)]="selectedClient" (input)="onFilterInputChange()" class="search-input"
+      placeholder="Rechercher un client...">
   </div>
 
   <!-- Offer Filter -->
   <div class="filter-offer" *ngIf="filterStatus === 'Offre'">
-    <input type="text" [(ngModel)]="selectedOffer" (input)="onFilterInputChange()" class="search-input" placeholder="Rechercher une offre...">
+    <input type="text" [(ngModel)]="selectedOffer" (input)="onFilterInputChange()" class="search-input"
+      placeholder="Rechercher une offre...">
   </div>
 
   <!-- Date Filter -->
@@ -61,9 +70,12 @@
         <tr>
           <th>#</th>
           <th>Client</th>
-          <th>Prix (MAD)</th>
-          <th>Date</th>
           <th>Offre</th>
+          <th>Date Début</th>
+          <th>Date Fin</th>
+          <th>Total (MAD)</th>
+          <th>Statut</th>
+          <th>Confirmation</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -71,25 +83,23 @@
         <tr *ngFor="let subscription of filteredSubscriptions; let i = index">
           <td>{{ i + 1 }}</td>
           <td>{{ subscription.client?.nom }}</td>
-          <td>{{ subscription.prix | number: '1.2-2' }}</td>
-          <td>{{ subscription.dateDebut | date: 'dd-MM-yyyy' }}</td>
           <td>{{ subscription.offer?.nom }}</td>
+          <td>{{ subscription.dateDebut | date: 'dd-MM-yyyy' }}</td>
+          <td>{{ subscription.dateFin | date: 'dd-MM-yyyy' }}</td>
+          <td>{{ subscription.total | number: '1.2-2' }}</td>
           <td>
-            <div class="action-icons">
-              <button class="btn-icon view" (click)="viewSubscription(subscription)" title="Voir">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </button>
-              <button class="btn-icon download" (click)="downloadSubscription(subscription)" title="Télécharger">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-              </button>
-            </div>
+            <span [class]="'badge ' + (subscription.active ? 'active' : 'inactive')">
+              {{ subscription.active ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td>
+            <span [class]="'badge ' + (subscription.confirme ? 'confirmed' : 'not-confirmed')">
+              {{ subscription.confirme ? 'Confirmé' : 'Non confirmé' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-edit" (click)="editSubscription(subscription)">Modifier</button>
+            <button class="btn-delete" (click)="deleteSubscription(subscription.id)">Supprimer</button>
           </td>
         </tr>
       </tbody>
@@ -107,37 +117,44 @@
     <div class="modal-body">
       <div class="form-group">
         <label>Client *</label>
-        <select [(ngModel)]="newSubscription.client" class="form-control">
-          <option value="">Sélectionner un client</option>
-          <option *ngFor="let client of clients" [ngValue]="client">{{ client.nom }}</option>
+        <select [(ngModel)]="newSubscription.client.id" name="client_id" class="form-control"
+          (change)="onClientChange()">
+          <option [value]="0" disabled>Sélectionner un client</option>
+          <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
         </select>
       </div>
+
       <div class="form-group">
         <label>Offre *</label>
-        <select [(ngModel)]="newSubscription.offer" class="form-control">
-          <option value="">Sélectionner une offre</option>
-          <option *ngFor="let offer of offers" [ngValue]="offer">{{ offer.nom }}</option>
+        <select [(ngModel)]="newSubscription.offer.id" name="offer_id" class="form-control" (change)="onOfferChange()">
+          <option [value]="0" disabled>Sélectionner une offre</option>
+          <option *ngFor="let offer of offers" [value]="offer.id">{{ offer.nom }}</option>
         </select>
       </div>
       <div class="form-group">
         <label>Date début *</label>
-        <input type="date" [(ngModel)]="newSubscription.dateDebut" class="form-control">
+        <input type="date" [(ngModel)]="newSubscription.dateDebut" name="dateDebut" class="form-control">
       </div>
       <div class="form-group">
         <label>Date fin *</label>
-        <input type="date" [(ngModel)]="newSubscription.dateFin" class="form-control">
+        <input type="date" [(ngModel)]="newSubscription.dateFin" name="dateFin" class="form-control">
       </div>
       <div class="form-group">
-        <label>Prix (MAD) *</label>
-        <input type="number" [(ngModel)]="newSubscription.prix" class="form-control" placeholder="Prix">
+        <label>Total (MAD) *</label>
+        <input type="number" [(ngModel)]="newSubscription.total" name="total" class="form-control" placeholder="Total"
+          step="0.01">
       </div>
       <div class="form-group">
-        <label>Statut</label>
-        <select [(ngModel)]="newSubscription.statut" class="form-control">
-          <option value="Actif">Actif</option>
-          <option value="Inactif">Inactif</option>
-          <option value="En attente">En attente</option>
-        </select>
+        <label>
+          <input type="checkbox" [(ngModel)]="newSubscription.confirme" name="confirme">
+          Confirmé
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="newSubscription.active" name="active">
+          Actif
+        </label>
       </div>
     </div>
     <div class="modal-footer">

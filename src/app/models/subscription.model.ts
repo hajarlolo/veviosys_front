@@ -1,12 +1,10 @@
-import { Client } from './client.model';
-import { Offer } from './offer.model';
-
 export interface Subscription {
   id?: number;
-  client?: Client;
-  offer?: Offer;
+  client: { id: number; nom?: string };
+  offer: { id: number; nom?: string };
   dateDebut: string;
   dateFin: string;
-  prix: number;
-  statut: string;
+  confirme: boolean;
+  total: number;
+  active: boolean;
 }

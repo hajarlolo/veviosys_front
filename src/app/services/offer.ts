@@ -19,7 +19,7 @@ export class OfferService {
 
   // Create an offer
   public createOffer(offer: Offer): Observable<Offer> {
-    return this.http.post<Offer>(`${this.apiServerUrl}/add`, offer);
+    return this.http.post<Offer>(`${this.apiServerUrl}`, offer);
   }
 
   // Get offer by ID
@@ -29,11 +29,11 @@ export class OfferService {
 
   // Update an offer
   public updateOffer(offerId: number, offer: Offer): Observable<Offer> {
-    return this.http.put<Offer>(`${this.apiServerUrl}/update/${offerId}`, offer);
+    return this.http.put<Offer>(`${this.apiServerUrl}/${offerId}`, offer);
   }
 
   // Delete an offer
   public deleteOffer(offerId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/delete/${offerId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${offerId}`);
   }
 }

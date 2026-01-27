@@ -19,7 +19,7 @@ export class ProprietesService {
 
   // Create a propriete
   public createPropriete(propriete: Propriete): Observable<Propriete> {
-    return this.http.post<Propriete>(`${this.apiServerUrl}/add`, propriete);
+    return this.http.post<Propriete>(`${this.apiServerUrl}`, propriete);
   }
 
   // Get propriete by ID
@@ -29,11 +29,11 @@ export class ProprietesService {
 
   // Update a propriete
   public updatePropriete(proprieteId: number, propriete: Propriete): Observable<Propriete> {
-    return this.http.put<Propriete>(`${this.apiServerUrl}/update/${proprieteId}`, propriete);
+    return this.http.put<Propriete>(`${this.apiServerUrl}/${proprieteId}`, propriete);
   }
 
   // Delete a propriete
   public deletePropriete(proprieteId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/delete/${proprieteId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${proprieteId}`);
   }
 }

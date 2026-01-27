@@ -240,6 +240,11 @@
   box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
 }
 
+.actions-cell {
+  display: flex;
+  gap: 8px !important;
+}
+
 .btn-edit,
 .btn-delete {
   padding: 8px 16px;

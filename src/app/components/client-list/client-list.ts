@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Add this for [(ngModel)] search
 import { ClientService } from '../../services/client';
@@ -16,12 +16,29 @@ export class ClientListComponent implements OnInit {
   searchValue: string = '';
   filterOptions = ['Touts', 'CIN', 'Nom', 'Prenom', 'Email', 'Ville', 'Pays'];
 
-  // These need to be typed as Client[] to match your model
   allClients: Client[] = [];
   filteredClients: Client[] = [];
 
+  showModal = false;
+  showViewModal = false;
+  editingId: number | null = null;
+  viewingClient: Client | null = null;
+
+  newClient: Client = {
+    id: 0,
+    cin: '',
+    nom: '',
+    prenom: '',
+    email: '',
+    telephone: '',
+    pays: '',
+    ville: '',
+    adresse: '',
+    profil: ''
+  };
+
   // 1. INJECT the service here
-  constructor(private clientService: ClientService,private cdr: ChangeDetectorRef) { }
+  constructor(private clientService: ClientService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     // 2. Call the backend
@@ -57,8 +74,8 @@ export class ClientListComponent implements OnInit {
         case 'Nom': return client.nom.toLowerCase().includes(search);
         case 'Prenom': return client.prenom.toLowerCase().includes(search);
         case 'Email': return client.email.toLowerCase().includes(search);
-        case 'Ville': return client.ville.toLowerCase().includes(search);
-        case 'Pays': return client.pays.toLowerCase().includes(search);
+        case 'Ville': return client.ville?.toLowerCase().includes(search) || false;
+        case 'Pays': return client.pays?.toLowerCase().includes(search) || false;
         default: // 'Touts' - search everything
           return Object.values(client).some(val =>
             String(val).toLowerCase().includes(search)
@@ -67,19 +84,89 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  onAddClient(): void { console.log('Add new client'); }
-  onViewClient(client: Client): void { console.log('View details:', client); }
+  onAddClient(): void {
+    this.openModal();
+    console.log('Add new client');
+  }
+
+  openModal(): void {
+    this.resetForm();
+    this.editingId = null;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.newClient = {
+      cin: '',
+      nom: '',
+      prenom: '',
+      email: '',
+      telephone: '',
+      pays: '',
+      ville: '',
+      adresse: ''
+    };
+  }
+
+  onEditClient(client: Client): void {
+    this.newClient = { ...client };
+    this.editingId = client.id || null;
+    this.showModal = true;
+  }
+
+  saveClient(): void {
+    if (!this.newClient.cin.trim() || !this.newClient.nom.trim() || !this.newClient.prenom.trim() || !this.newClient.email.trim()) {
+      alert('Veuillez remplir les champs obligatoires (CIN, Nom, Prénom, Email)');
+      return;
+    }
+
+    if (this.editingId) {
+      this.clientService.updateClient(this.editingId, this.newClient).subscribe({
+        next: () => {
+          this.loadClients();
+          this.closeModal();
+        },
+        error: (err: any) => console.error('Error updating client:', err)
+      });
+    } else {
+      this.clientService.createClient(this.newClient).subscribe({
+        next: () => {
+          this.loadClients();
+          this.closeModal();
+        },
+        error: (err: any) => console.error('Error creating client:', err)
+      });
+    }
+  }
+
+  onViewClient(client: Client): void {
+    this.viewingClient = { ...client };
+    this.showViewModal = true;
+    console.log('Viewing details for:', client);
+  }
+
+  closeViewModal(): void {
+    this.showViewModal = false;
+    this.viewingClient = null;
+  }
   onDeleteClient(client: Client): void {
     if (confirm(`Voulez-vous vraiment supprimer le client ${client.prenom} ${client.nom} ?`)) {
-      this.clientService.deleteClient(client.id).subscribe({
-        next: () => {
-          // Remove from local array so the UI updates immediately
-          this.allClients = this.allClients.filter(c => c.id !== client.id);
-          this.applyFilter(); // Update the filtered view too
-          console.log('Client deleted successfully');
-        },
-        error: (err) => console.error('Delete failed', err)
-      });
+      if (client.id !== undefined) {
+        this.clientService.deleteClient(client.id).subscribe({
+          next: () => {
+            // Remove from local array so the UI updates immediately
+            this.allClients = this.allClients.filter(c => c.id !== client.id);
+            this.applyFilter(); // Update the filtered view too
+            console.log('Client deleted successfully');
+          },
+          error: (err: any) => console.error('Delete failed', err)
+        });
+      }
     }
   }
 }

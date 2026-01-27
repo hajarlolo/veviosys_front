@@ -22,6 +22,14 @@ export class ClientService {
     return this.http.post<Client>(`${this.apiServerUrl}`, client);
   }
 
+  public createClient(client: Client): Observable<Client> {
+    return this.addClient(client);
+  }
+
+  public updateClient(clientId: number, client: Client): Observable<Client> {
+    return this.http.put<Client>(`${this.apiServerUrl}/${clientId}`, client);
+  }
+
   // If her GET is at /api/clients/1, change this to `${this.apiServerUrl}/${clientId}`
   public getClientById(clientId: number): Observable<Client> {
     return this.http.get<Client>(`${this.apiServerUrl}/${clientId}`);

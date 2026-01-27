@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';  // 🔹 important
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  standalone: true,             // 🔹 standalone
+  imports: [CommonModule, FormsModule, RouterLink], // 🔹 Added RouterLink
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
 export class LoginComponent {
   email: string = '';
@@ -18,20 +19,37 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onLogin(): void {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Please fill in all fields';
+  onLogin() {
+    // Clear previous error
+    this.errorMessage = '';
+
+    // Validate input
+    if (!this.email.trim()) {
+      this.errorMessage = 'Veuillez entrer votre email';
+      return;
+    }
+
+    if (!this.password.trim()) {
+      this.errorMessage = 'Veuillez entrer votre mot de passe';
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
+      this.errorMessage = 'Veuillez entrer un email valide';
       return;
     }
 
     this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        console.log('Login successful', response);
+      next: (res) => {
+        console.log(res);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.errorMessage = 'Invalid email or password';
-        console.error('Login error', err);
+        // Display the error message from backend
+        this.errorMessage = err.error || 'Erreur de connexion';
+        console.error('Login error:', err);
       }
     });
   }
