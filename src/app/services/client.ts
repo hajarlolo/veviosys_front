@@ -5,29 +5,29 @@ import { Client } from '../models/client.model'; // Import your interface
 @Injectable({
   providedIn: 'root'
 })
-export class ClientService {
 
-  private apiServerUrl = 'http://localhost:8080/api/clients'; // Change this to match Douae's controller path
+export class ClientService {
+  // Base URL from your test
+  private apiServerUrl = 'http://localhost:8080/api/clients';
 
   constructor(private http: HttpClient) { }
 
-  // Get all clients
+  // FIX: Removed "/all" because your test shows data is at the root
   public getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(`${this.apiServerUrl}/all`);
+    return this.http.get<Client[]>(this.apiServerUrl);
   }
 
-  // Add a client
+  // Double-check with Douae if her POST is really at /add or just the root
   public addClient(client: Client): Observable<Client> {
-    return this.http.post<Client>(`${this.apiServerUrl}/add`, client);
+    return this.http.post<Client>(`${this.apiServerUrl}`, client);
   }
 
-  // Find client by ID (useful for the Profile page in Figma)
+  // If her GET is at /api/clients/1, change this to `${this.apiServerUrl}/${clientId}`
   public getClientById(clientId: number): Observable<Client> {
-    return this.http.get<Client>(`${this.apiServerUrl}/find/${clientId}`);
+    return this.http.get<Client>(`${this.apiServerUrl}/${clientId}`);
   }
 
-  // Delete client
   public deleteClient(clientId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/delete/${clientId}`);
+    return this.http.delete<void>(`${this.apiServerUrl}/${clientId}`);
   }
 }

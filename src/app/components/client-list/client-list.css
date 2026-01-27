@@ -109,7 +109,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
-    margin-top: 20px;
+    min-height: 200px;
+    /* Ensure it's not collapsed */
+    border: 1px solid red;
+    /* Temporary: if you see a red box, the grid is there */
 }
 
 /* Client Card */
