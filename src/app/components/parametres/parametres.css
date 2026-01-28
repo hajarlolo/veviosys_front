@@ -1,6 +1,6 @@
 .parametres-container {
   padding: 20px;
-  background: #f8f9fa;
+  background: var(--bg-main);
   min-height: 100vh;
   max-width: 900px;
   margin: 0 auto;
@@ -32,7 +32,7 @@
 }
 
 .tab-btn.active {
-  color: #667eea;
+  color: var(--primary-blue);
 }
 
 .tab-btn.active::after {
@@ -42,7 +42,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-blue);
 }
 
 /* Tab Content */
@@ -56,6 +56,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -110,7 +111,7 @@
   height: 200px;
   border-radius: 12px;
   overflow: hidden;
-  border: 3px solid #667eea;
+  border: 3px solid var(--primary-blue);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,7 +142,7 @@
 }
 
 .btn-upload {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--light-blue);
   color: white;
   border: none;
   padding: 10px 24px;
@@ -150,7 +151,7 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(86, 204, 242, 0.3);
   text-align: center;
   display: block;
   width: 100%;
@@ -159,7 +160,8 @@
 
 .btn-upload:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  background: var(--secondary-blue);
+  box-shadow: 0 6px 16px rgba(86, 204, 242, 0.4);
 }
 
 .btn-upload:active {
@@ -244,8 +246,8 @@
 }
 
 .btn-modifier {
-  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-  color: #0f6b3e;
+  background: var(--action-success);
+  color: white;
   border: none;
   padding: 12px 40px;
   border-radius: 8px;
@@ -253,12 +255,13 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(132, 250, 176, 0.3);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 .btn-modifier:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(132, 250, 176, 0.4);
+  background: #1b5e20;
+  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
 }
 
 .btn-modifier:active {
@@ -278,7 +281,7 @@
 }
 
 .btn-ajouter {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-blue);
   color: white;
   border: none;
   padding: 12px 30px;
@@ -287,13 +290,14 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(30, 90, 168, 0.3);
   white-space: nowrap;
 }
 
 .btn-ajouter:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  background: var(--secondary-blue);
+  box-shadow: 0 6px 16px rgba(30, 90, 168, 0.4);
 }
 
 .btn-ajouter:active {
@@ -347,7 +351,7 @@
 }
 
 .btn-supprimer {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: var(--action-delete);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -356,12 +360,13 @@
   font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(245, 87, 108, 0.3);
+  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.3);
 }
 
 .btn-supprimer:hover {
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(245, 87, 108, 0.4);
+  background: var(--action-delete-hover);
+  box-shadow: 0 3px 8px rgba(229, 57, 53, 0.4);
 }
 
 .btn-supprimer:active {
@@ -369,7 +374,7 @@
 }
 
 .btn-info {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-blue);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -378,12 +383,13 @@
   font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 6px rgba(30, 90, 168, 0.3);
 }
 
 .btn-info:hover {
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
+  background: var(--secondary-blue);
+  box-shadow: 0 3px 8px rgba(30, 90, 168, 0.4);
 }
 
 .btn-info:active {

@@ -21,10 +21,11 @@
   background: white;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
-.custom-table th, .custom-table td {
+.custom-table th,
+.custom-table td {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #f3f6f9;
@@ -49,8 +50,9 @@
   padding: 20px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+
 
 .avatar-circle {
   width: 60px;
@@ -64,4 +66,37 @@
   font-size: 24px;
   font-weight: bold;
   margin: 0 auto 15px;
+}
+
+:root {
+  /* Brand Core */
+  --primary-blue: #1E5AA8;
+  --secondary-blue: #2F80ED;
+
+  /* UI Highlights */
+  --light-blue: #56CCF2;
+  --dark-blue: #0F3057;
+
+  /* Neutrals */
+  --bg-main: #F4F4F4;
+  --bg-card: #FFFFFF;
+  --border-muted: #B0BEC5;
+
+  /* Text */
+  --text-main: #1F2937;
+  --text-secondary: #6B7280;
+  --text-inverted: #FFFFFF;
+
+  /* Actions */
+  --action-edit: #2F80ED;
+  --action-edit-hover: #1E5AA8;
+  --action-delete: #E53935;
+  --action-delete-hover: #C62828;
+  --action-view: #56CCF2;
+  --action-success: #2E7D32;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
 }

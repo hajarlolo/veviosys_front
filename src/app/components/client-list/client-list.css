@@ -322,7 +322,7 @@
 }
 
 .btn-savoir {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--action-edit);
     color: white;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
@@ -333,7 +333,7 @@
 }
 
 .btn-supprimer {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+     background: var(--action-delete);
     color: white;
     box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
 }

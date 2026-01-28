@@ -38,4 +38,17 @@ export class ClientService {
   public deleteClient(clientId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/${clientId}`);
   }
+
+  getPhotoUrl(path: any, name: string = 'Client'): string {
+    if (!path) {
+      const cleanName = (name || '').replace(/undefined/g, '').trim() || 'Client';
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName)}&background=E5A520&color=fff&size=256`;
+    }
+
+    if (path.startsWith('http') || path.startsWith('assets') || path.startsWith('data:')) {
+      return path;
+    }
+
+    return `http://localhost:8080${path}`;
+  }
 }

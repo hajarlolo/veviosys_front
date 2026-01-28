@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, BehaviorSubject, of, tap } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +19,54 @@ export class AuthService {
     this.isLoggedIn$ = this.isLoggedInSubject.asObservable();
   }
 
+
+  private hasToken(): boolean {
+    return this.isBrowser ? !!localStorage.getItem('authToken') : false;
+  }
+
+  getToken(): string | null {
+    return this.isBrowser ? localStorage.getItem('authToken') : null;
+  }
+
+  // User State Management
+  private currentUserSubject = new BehaviorSubject<any>(this.getUserFromStorage());
+  public currentUser$ = this.currentUserSubject.asObservable();
+
+  private getUserFromStorage(): any {
+    if (this.isBrowser) {
+      const userStr = localStorage.getItem('currentUser');
+      return userStr ? JSON.parse(userStr) : null;
+    }
+    return null;
+  }
+
+  // Update login to set mock user
   login(email: string, password: string): Observable<any> {
     const params = new HttpParams().set('email', email).set('password', password);
-    return this.http.post(`${this.apiUrl}/login`, null, { params, responseType: 'text' }).pipe(
-      tap(response => {
-        // Only set token and mark as logged in if the response is successful
-        if (response && this.isBrowser) {
-          localStorage.setItem('authToken', 'dummy-token');
+    // Expecting User object from backend login response now
+    return this.http.post<any>(`${this.apiUrl}/login`, null, { params }).pipe(
+      tap((user: any) => {
+        if (user && user.id && this.isBrowser) {
+          // Assuming backend now returns User object with ID
+          localStorage.setItem('authToken', 'your-actual-jwt-token-if-any'); // Replace with actual token from backend if applicable
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
           this.isLoggedInSubject.next(true);
+        } else {
+           console.error('Login failed: User object or ID missing from backend response. Ensure backend /api/auth/login returns User object.');
+           // Handle login failure or incomplete data scenario
         }
+      })
+    );
+  }
+
+  updateUser(id: number, userData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${id}`, userData).pipe(
+      tap(updatedUser => {
+        if (this.isBrowser) {
+          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        }
+        this.currentUserSubject.next(updatedUser);
       })
     );
   }
@@ -34,14 +74,31 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
-        if (this.isBrowser) localStorage.removeItem('authToken');
+        if (this.isBrowser) {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('currentUser');
+        }
+        this.currentUserSubject.next(null);
         this.isLoggedInSubject.next(false);
       })
     );
   }
 
+
+  getAllUsers(): Observable<any[]> {
+    // Mock list of users for Parametres -> Utilisateurs tab
+    return of([
+      { id: 1, nom: 'Doe', prenom: 'John', email: 'john@example.com', role: 'Admin' },
+      { id: 2, nom: 'Smith', prenom: 'Jane', email: 'jane@example.com', role: 'User' }
+    ]);
+  }
+
   register(user: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user);
+  }
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/find/${id}`);
   }
 
   forgotPassword(email: string): Observable<any> {
@@ -58,11 +115,17 @@ export class AuthService {
     return this.hasToken();
   }
 
-  private hasToken(): boolean {
-    return this.isBrowser ? !!localStorage.getItem('authToken') : false;
-  }
+  getPhotoUrl(path: any, name: string = 'User'): string {
+    if (!path) {
+      // Clean name: remove 'undefined' and trim
+      const cleanName = (name || '').replace(/undefined/g, '').trim() || 'User';
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName)}&background=1E5AA8&color=fff&size=256`;
+    }
 
-  getToken(): string | null {
-    return this.isBrowser ? localStorage.getItem('authToken') : null;
+    if (path.startsWith('http') || path.startsWith('assets') || path.startsWith('data:')) {
+      return path;
+    }
+
+    return `http://localhost:8080${path}`;
   }
 }

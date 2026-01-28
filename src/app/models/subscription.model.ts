@@ -7,4 +7,5 @@ export interface Subscription {
   confirme: boolean;
   total: number;
   active: boolean;
+  nbuser: number;
 }

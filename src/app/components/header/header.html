@@ -1,11 +1,19 @@
 <header class="top-header">
   <div class="user-profile">
-    <div class="user-info">
-      <span class="user-name">Current User</span>
-      <span class="user-role">Administrateur</span>
-    </div>
-    <div class="user-avatar">
-<!--       <img src="/avatar-placeholder.jpg" alt="User">
- -->    </div>
+    <button class="btn-notif">
+      <i class="fa fa-bell"></i> 🔔
+      <span class="notif-badge"></span>
+    </button>
+
+    <button class="profile-btn" (click)="goToProfile()">
+      <div class="user-info">
+        <span class="user-name">{{ currentUser?.prenom }} {{ currentUser?.nom }}</span>
+        <span class="user-role">{{ currentUser?.role || 'Utilisateur' }}</span>
+      </div>
+      <div class="user-avatar">
+        <img [src]="getPhotoUrl(currentUser?.photo, (currentUser?.prenom || '') + ' ' + (currentUser?.nom || ''))"
+          alt="User">
+      </div>
+    </button>
   </div>
 </header>

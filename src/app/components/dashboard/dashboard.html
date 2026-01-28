@@ -21,18 +21,44 @@
       <h3>{{ offer.nom }}</h3>
       <div class="price">${{ offer.prix }}<span>/Month</span></div>
       <ul>
-        <li *ngFor="let feature of offer.features">{{ feature }}</li>
+        <li *ngFor="let tech of offer.technologies">{{ tech.nom }}</li>
       </ul>
-      <button class="btn-main">Commander</button>
     </div>
   </div>
 
   <h2>Nos Technologes:</h2>
   <div class="grid-container">
     <div *ngFor="let tech of techs" class="tech-card">
-      <div class="tech-icon-box"></div>
+      <div class="tech-icon-box">
+        <img *ngIf="tech.photo" [src]="getPhotoUrl(tech.photo, tech.nom)" alt="{{ tech.nom }}" class="tech-photo">
+        <span *ngIf="!tech.photo">{{ tech.nom[0] }}</span>
+      </div>
       <h4>{{ tech.nom }}</h4>
-      <button class="btn-outline">Savoir Plus</button>
+      <button class="btn-outline" (click)="openTechnologyModal(tech)">Savoir Plus</button>
     </div>
   </div>
+
+  <!-- Technology Detail Modal -->
+  <div class="modal" [class.show]="showTechnologyModal">
+    <div class="modal-content" *ngIf="selectedTechnology">
+      <div class="modal-header">
+        <h3>{{ selectedTechnology.nom }}</h3>
+        <button class="close-btn" (click)="closeTechnologyModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="tech-modal-photo">
+          <img [src]="getPhotoUrl(selectedTechnology.photo, selectedTechnology.nom)" alt="{{ selectedTechnology.nom }}">
+        </div>
+        <p class="tech-modal-description">{{ selectedTechnology.description }}</p>
+        <div class="tech-modal-details">
+          <p><strong>Prix:</strong> ${{ selectedTechnology.prix }}</p>
+          <p><strong>Disponible:</strong> {{ selectedTechnology.disponible ? 'Oui' : 'Non' }}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close-view" (click)="closeTechnologyModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" [class.show]="showTechnologyModal" (click)="closeTechnologyModal()"></div>
 </div>

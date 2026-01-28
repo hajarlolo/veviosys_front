@@ -36,4 +36,7 @@ export class SubscriptionService {
   public deleteSubscription(subscriptionId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/${subscriptionId}`);
   }
+  checkExpired(): Observable<any> {
+    return this.http.post(`${this.apiServerUrl}/check-expired`, {}, { responseType: 'text' });
+  }
 }

@@ -1,0 +1,221 @@
+.profile-container {
+    padding: 30px;
+    background: var(--bg-main);
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Form Sections */
+.form-section {
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    margin-bottom: 25px;
+    border: 1px solid #e2e8f0;
+}
+
+.form-section h3 {
+    font-size: 18px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Informations Personnelles Container */
+.info-personnelles-container {
+    display: flex;
+    gap: 40px;
+}
+
+.info-left {
+    flex: 1;
+}
+
+.info-right {
+    width: 200px;
+    flex-shrink: 0;
+    order: 2;
+    /* Put photo on the right */
+}
+
+/* Profile Photo Section */
+.profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.photo-container {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    /* Make it circular */
+    overflow: hidden;
+    border: 4px solid var(--bg-card);
+    outline: 3px solid var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7fafc;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-placeholder {
+    color: #cbd5e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-input {
+    display: none;
+}
+
+.btn-upload {
+    background: var(--light-blue);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+}
+
+.btn-upload:hover {
+    background: var(--secondary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(86, 204, 242, 0.3);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+.form-row {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row.two-columns {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-row.single-column {
+    grid-template-columns: 1fr;
+}
+
+.form-control {
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+    color: var(--text-main);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(30, 90, 168, 0.1);
+}
+
+/* CIN Display */
+.cin-display {
+    padding: 12px 16px;
+    background: #edf2f7;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-modifier {
+    background: var(--action-success);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+}
+
+.btn-modifier:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(46, 125, 50, 0.3);
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 15px;
+    }
+
+    .info-personnelles-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .info-right {
+        width: 100%;
+        order: -1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-row.two-columns {
+        grid-template-columns: 1fr;
+    }
+}

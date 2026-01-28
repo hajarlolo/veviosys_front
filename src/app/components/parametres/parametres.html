@@ -1,112 +1,8 @@
 <div class="parametres-container">
   <div class="tabs-header">
-    <button 
-      class="tab-btn" 
-      [class.active]="activeTab === 'compte'"
-      (click)="changeTab('compte')">
-      Compte
-    </button>
-    <button 
-      class="tab-btn" 
-      [class.active]="activeTab === 'privileges'"
-      (click)="changeTab('privileges')">
+    <button class="tab-btn" [class.active]="activeTab === 'privileges'" (click)="changeTab('privileges')">
       Privilèges/Groupes
     </button>
-  </div>
-
-  <!-- Compte Tab -->
-  <div class="tab-content" *ngIf="activeTab === 'compte'">
-    <div class="form-section">
-      <h3>Informations Personnelles</h3>
-      
-      <div class="info-personnelles-container">
-        <div class="info-left">
-          <div class="form-row two-columns">
-            <div class="form-group">
-              <label>Nom :</label>
-              <input type="text" [(ngModel)]="userData.nom" class="form-control" placeholder="Nom">
-            </div>
-            <div class="form-group">
-              <label>Prenom :</label>
-              <input type="text" [(ngModel)]="userData.prenom" class="form-control" placeholder="Prenom">
-            </div>
-          </div>
-
-          <div class="form-row two-columns">
-            <div class="form-group">
-              <label>CIN :</label>
-              <div class="cin-display">{{ userData.cin }}</div>
-            </div>
-            <div class="form-group">
-              <label>Addresse :</label>
-              <input type="text" [(ngModel)]="userData.adresse" class="form-control" placeholder="Addresse">
-            </div>
-          </div>
-
-          <div class="form-row two-columns">
-            <div class="form-group">
-              <label>Villes :</label>
-              <input type="text" [(ngModel)]="userData.ville" class="form-control" placeholder="Villes">
-            </div>
-            <div class="form-group">
-              <label>Pays :</label>
-              <input type="text" [(ngModel)]="userData.pays" class="form-control" placeholder="Pays">
-            </div>
-          </div>
-        </div>
-
-        <div class="info-right">
-          <div class="profile-photo-section">
-            <div class="photo-container">
-              <img *ngIf="userData.photo" [src]="userData.photo" alt="Profile" class="profile-photo">
-              <div *ngIf="!userData.photo" class="photo-placeholder">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-            </div>
-            <label for="photo-input" class="btn-upload">Télécharger</label>
-            <input 
-              id="photo-input" 
-              type="file" 
-              accept="image/*" 
-              (change)="onPhotoSelected($event)" 
-              class="photo-input">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Info De Contact</h3>
-
-      <div class="form-row two-columns">
-        <div class="form-group">
-          <label>Email :</label>
-          <input type="email" [(ngModel)]="userData.email" class="form-control" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <label>Numero De Telephone :</label>
-          <input type="tel" [(ngModel)]="userData.telephone" class="form-control" placeholder="Numero de Telephone">
-        </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Info D'Authentication</h3>
-
-      <div class="form-row single-column">
-        <div class="form-group">
-          <label>Mot De Passe :</label>
-          <input type="password" [(ngModel)]="userData.motDePasse" class="form-control" placeholder="Mot de passe">
-        </div>
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <button class="btn-modifier" (click)="updateProfile()">Modifier</button>
-    </div>
   </div>
 
   <!-- Privileges Tab -->
@@ -114,7 +10,7 @@
     <!-- Groupes Section -->
     <div class="form-section">
       <h3>Groupes :</h3>
-      
+
       <div class="management-row">
         <div class="select-group">
           <select class="form-control" [(ngModel)]="selectedGroupe">
@@ -150,7 +46,7 @@
     <!-- Privilèges Section -->
     <div class="form-section">
       <h3>Privilèges</h3>
-      
+
       <div class="management-row">
         <div class="select-group">
           <select class="form-control" [(ngModel)]="selectedPrivilege">
@@ -187,7 +83,7 @@
     <!-- Utilisateur Section -->
     <div class="form-section">
       <h3>Utilisateur</h3>
-      
+
       <div class="management-row">
         <div class="select-group">
           <select class="form-control" [(ngModel)]="selectedUtilisateur">
@@ -226,7 +122,7 @@
   </div>
 
   <!-- Agents Tab -->
-<!--   <div class="tab-content" *ngIf="activeTab === 'agents'">
+  <!--   <div class="tab-content" *ngIf="activeTab === 'agents'">
     <p>Contenu Agents à venir</p>
   </div> -->
 </div>

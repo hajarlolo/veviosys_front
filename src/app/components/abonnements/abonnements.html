@@ -75,7 +75,7 @@
           <th>Date Fin</th>
           <th>Total (MAD)</th>
           <th>Statut</th>
-          <th>Confirmation</th>
+          <th>Nombre d'utilisateurs</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -87,16 +87,13 @@
           <td>{{ subscription.dateDebut | date: 'dd-MM-yyyy' }}</td>
           <td>{{ subscription.dateFin | date: 'dd-MM-yyyy' }}</td>
           <td>{{ subscription.total | number: '1.2-2' }}</td>
+          
           <td>
             <span [class]="'badge ' + (subscription.active ? 'active' : 'inactive')">
               {{ subscription.active ? 'Actif' : 'Inactif' }}
             </span>
           </td>
-          <td>
-            <span [class]="'badge ' + (subscription.confirme ? 'confirmed' : 'not-confirmed')">
-              {{ subscription.confirme ? 'Confirmé' : 'Non confirmé' }}
-            </span>
-          </td>
+          <td>{{ subscription.nbuser }}</td>
           <td class="actions-cell">
             <button class="btn-edit" (click)="editSubscription(subscription)">Modifier</button>
             <button class="btn-delete" (click)="deleteSubscription(subscription.id)">Supprimer</button>
@@ -143,6 +140,11 @@
         <label>Total (MAD) *</label>
         <input type="number" [(ngModel)]="newSubscription.total" name="total" class="form-control" placeholder="Total"
           step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Nombre d'utilisateurs *</label>
+        <input type="number" [(ngModel)]="newSubscription.nbuser" name="nbuser" class="form-control" placeholder="Nombre d'utilisateurs"
+          step="1">
       </div>
       <div class="form-group">
         <label>

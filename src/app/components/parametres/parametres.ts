@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-parametres',
@@ -9,21 +10,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './parametres.html',
   styleUrl: './parametres.css'
 })
-export class ParametresComponent implements OnInit {
-  activeTab = 'compte';
 
-  userData = {
-    cin: '',
-    nom: '',
-    prenom: '',
-    adresse: '',
-    ville: '',
-    pays: '',
-    email: '',
-    telephone: '',
-    motDePasse: '',
-    photo: ''
-  };
+export class ParametresComponent implements OnInit {
+  activeTab = 'privileges';
 
   // Privileges/Groupes Tab Data
   selectedGroupe: string = '';
@@ -34,29 +23,28 @@ export class ParametresComponent implements OnInit {
   privileges: any[] = [];
   utilisateurs: any[] = [];
 
-  constructor() {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // Load user data
+    // Load sub-lists (mocked)
+    this.authService.getAllUsers().subscribe(users => {
+      this.utilisateurs = users;
+    });
+
+    // Mock Groupe/Privilege data
+    this.groupes = [
+      { id: 1, libelle: 'Administrateurs' },
+      { id: 2, libelle: 'Utilisateurs' }
+    ];
+
+    this.privileges = [
+      { id: 1, libelle: 'Lecture' },
+      { id: 2, libelle: 'Ecriture' }
+    ];
   }
 
   changeTab(tab: string): void {
     this.activeTab = tab;
-  }
-
-  updateProfile(): void {
-    console.log('Profile updated:', this.userData);
-  }
-
-  onPhotoSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.userData.photo = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
   }
 
   // Groupes Methods

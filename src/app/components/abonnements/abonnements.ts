@@ -38,7 +38,8 @@ export class AbonnementsComponent implements OnInit {
     dateFin: '',
     confirme: false,
     total: 0,
-    active: true
+    active: true,
+    nbuser: 0
   };
 
   constructor(
@@ -49,7 +50,7 @@ export class AbonnementsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadSubscriptions();
+    this.loadSubscriptions()
     this.loadClients();
     this.loadOffers();
   }
@@ -149,7 +150,8 @@ export class AbonnementsComponent implements OnInit {
       dateFin: '',
       confirme: false,
       total: 0,
-      active: true
+      active: true,
+      nbuser: 0
     };
   }
 

@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Add this for [(ngModel)] search
+import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../services/client';
 import { Client } from '../../models/client.model';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Added FormsModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './client-list.html',
   styleUrl: './client-list.css'
 })
@@ -37,11 +37,13 @@ export class ClientListComponent implements OnInit {
     profil: ''
   };
 
-  // 1. INJECT the service here
   constructor(private clientService: ClientService, private cdr: ChangeDetectorRef) { }
 
+  getPhotoUrl(path: any, name: string): string {
+    return this.clientService.getPhotoUrl(path, name);
+  }
+
   ngOnInit(): void {
-    // 2. Call the backend
     this.loadClients();
   }
 
@@ -59,7 +61,6 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  // Logic for your search bar
   applyFilter(): void {
     const search = this.searchValue.toLowerCase().trim();
 
@@ -154,14 +155,14 @@ export class ClientListComponent implements OnInit {
     this.showViewModal = false;
     this.viewingClient = null;
   }
+
   onDeleteClient(client: Client): void {
     if (confirm(`Voulez-vous vraiment supprimer le client ${client.prenom} ${client.nom} ?`)) {
       if (client.id !== undefined) {
         this.clientService.deleteClient(client.id).subscribe({
           next: () => {
-            // Remove from local array so the UI updates immediately
             this.allClients = this.allClients.filter(c => c.id !== client.id);
-            this.applyFilter(); // Update the filtered view too
+            this.applyFilter();
             console.log('Client deleted successfully');
           },
           error: (err: any) => console.error('Delete failed', err)

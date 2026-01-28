@@ -1,0 +1,98 @@
+<div class="profile-container">
+    <div class="page-header">
+        <h2>Mon Profil</h2>
+    </div>
+
+    <div class="form-section">
+        <h3>Informations Personnelles</h3>
+
+        <div class="info-personnelles-container">
+            <div class="info-left">
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label>Nom :</label>
+                        <input type="text" [(ngModel)]="userData.nom" class="form-control" placeholder="Nom" [attr.value]="userData.nom">
+                    </div>
+                    <div class="form-group">
+                        <label>Prénom :</label>
+                        <input type="text" [(ngModel)]="userData.prenom" class="form-control" placeholder="Prénom" [attr.value]="userData.prenom">
+                    </div>
+                </div>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label>CIN :</label>
+                        <input type="text" [(ngModel)]="userData.cin" class="form-control" placeholder="CIN" [attr.value]="userData.cin">
+                    </div>
+                    <div class="form-group">
+                        <label>Adresse :</label>
+                        <input type="text" [(ngModel)]="userData.adresse" class="form-control" placeholder="Adresse" [attr.value]="userData.adresse">
+                    </div>
+                </div>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label>Ville :</label>
+                        <input type="text" [(ngModel)]="userData.ville" class="form-control" placeholder="Ville" [attr.value]="userData.ville">
+                    </div>
+                    <div class="form-group">
+                        <label>Pays :</label>
+                        <input type="text" [(ngModel)]="userData.pays" class="form-control" placeholder="Pays" [attr.value]="userData.pays">
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-right">
+                <div class="profile-photo-section">
+                    <div class="photo-container">
+                        <img *ngIf="userData.photo"
+                            [src]="getPhotoUrl(userData.photo, userData.prenom + ' ' + userData.nom)" alt="Profile"
+                            class="profile-photo">
+                        <div *ngIf="!userData.photo" class="photo-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <label for="photo-input" class="btn-upload">Changer Photo</label>
+                    <input id="photo-input" type="file" accept="image/*" (change)="onPhotoSelected($event)"
+                        class="photo-input">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3>Info De Contact</h3>
+
+        <div class="form-row two-columns">
+            <div class="form-group">
+                <label>Email :</label>
+                <input type="email" [(ngModel)]="userData.email" class="form-control" placeholder="Email" [attr.value]="userData.email">
+            </div>
+            <div class="form-group">
+                <label>Numero De Telephone :</label>
+                <input type="tel" [(ngModel)]="userData.telephone" class="form-control" [attr.value]="userData.telephone"
+                    placeholder="Numero de Telephone">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3>Info D'Authentication</h3>
+
+        <div class="form-row single-column">
+            <div class="form-group">
+                <label>Mot De Passe :</label>
+                <input type="password" [(ngModel)]="userData.motDePasse" class="form-control" [attr.value]="userData.motDePasse"
+                    placeholder="Mot de passe">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn-modifier" (click)="updateProfile()">Enregistrer les modifications</button>
+    </div>
+</div>

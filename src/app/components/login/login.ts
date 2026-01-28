@@ -17,7 +17,7 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   onLogin() {
     // Clear previous error
@@ -43,13 +43,18 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        console.log(res);
+        console.log('Login success:', res);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        // Display the error message from backend
-        this.errorMessage = err.error || 'Erreur de connexion';
-        console.error('Login error:', err);
+        console.error('Login error detail:', err);
+        if (err.status === 0) {
+          this.errorMessage = 'Erreur réseau : Le serveur est injoignable ou problème CORS';
+        } else if (err.status === 401) {
+          this.errorMessage = 'Email ou mot de passe incorrect';
+        } else {
+          this.errorMessage = `Erreur ${err.status} : ${err.message || 'Erreur serveur'}`;
+        }
       }
     });
   }

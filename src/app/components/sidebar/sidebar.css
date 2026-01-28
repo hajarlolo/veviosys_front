@@ -6,7 +6,7 @@
 .sidebar {
     width: 260px;
     height: 100vh;
-    background-color: #F4F7F6;
+    background-color: var(--dark-blue);
     color: white;
     display: flex;
     flex-direction: column;
@@ -15,6 +15,8 @@
     left: 0;
     top: 0;
     box-sizing: border-box;
+    z-index: 100;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo-section {
@@ -29,41 +31,49 @@
 
 .tagline {
     font-size: 10px;
-    color: #888;
+    color: rgba(255, 255, 255, 0.6);
     margin: 0;
 }
 
 .menu {
     flex-grow: 1;
     overflow-y: auto;
-    /* Allows the middle menu to scroll if there are too many items */
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     padding: 15px 25px;
-    color: #737485;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     transition: 0.3s;
     cursor: pointer;
+    font-weight: 500;
 }
 
-.nav-item:hover,
+.nav-item:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 .nav-item.active {
     color: #ffffff;
-    background-color: #1e61a5;
-    border-left: 4px solid #393952;
+    background-color: var(--primary-blue);
+    border-left: 4px solid var(--light-blue);
 }
 
 .bottom-menu {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 10px 0 20px 0;
-    /* Added more bottom padding */
     margin-top: auto;
-    /* Pushes this section to the absolute bottom of the flex container */
 }
 
 .logout {
-    color: #f64e60;
+    color: var(--action-delete);
+    /* Red for logout */
+}
+
+.logout:hover {
+    color: var(--action-delete-hover);
+    background-color: rgba(229, 57, 53, 0.1);
 }
