@@ -37,6 +37,8 @@ export class SubscriptionService {
     return this.http.delete<void>(`${this.apiServerUrl}/${subscriptionId}`);
   }
   checkExpired(): Observable<any> {
-    return this.http.post(`${this.apiServerUrl}/check-expired`, {}, { responseType: 'text' });
+    return this.http.post(`${this.apiServerUrl}/check-expired`, {}, { 
+      responseType: 'text' as 'json'  // ← Accepter du texte
+    });
   }
 }

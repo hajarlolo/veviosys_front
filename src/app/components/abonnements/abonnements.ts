@@ -34,8 +34,8 @@ export class AbonnementsComponent implements OnInit {
   newSubscription: Subscription = {
     client: { id: 0 },
     offer: { id: 0 },
-    dateDebut: '',
-    dateFin: '',
+    dateDebut: new Date(),
+    dateFin: new Date(),
     confirme: false,
     total: 0,
     active: true,
@@ -50,11 +50,20 @@ export class AbonnementsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadSubscriptions()
+    this.checkExpiredSubscriptions(); // Vérifier au chargement
+    this.loadSubscriptions();
     this.loadClients();
     this.loadOffers();
   }
 
+  checkExpiredSubscriptions(): void {
+    this.subscriptionService.checkExpired().subscribe({
+      next: () => {
+        console.log('Vérification des abonnements expirés effectuée');
+      },
+      error: (err) => console.error('Erreur lors de la vérification:', err)
+    });
+  }
   loadSubscriptions(): void {
     this.subscriptionService.getSubscriptions().subscribe({
       next: (data) => {
@@ -146,8 +155,8 @@ export class AbonnementsComponent implements OnInit {
     this.newSubscription = {
       client: { id: 0 },
       offer: { id: 0 },
-      dateDebut: '',
-      dateFin: '',
+      dateDebut: new Date(),
+      dateFin: new Date(),
       confirme: false,
       total: 0,
       active: true,

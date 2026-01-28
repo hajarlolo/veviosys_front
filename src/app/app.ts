@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [RouterOutlet, SidebarComponent, HeaderComponent, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']  
 })
 export class App {
   title = 'Abonnement_front';
@@ -19,8 +19,8 @@ export class App {
   constructor(private router: Router) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.isLoginPage.set(event.url === '/login');
+      .subscribe((event: NavigationEnd) => {  
+        this.isLoginPage.set(event.urlAfterRedirects === '/login');
       });
   }
 }

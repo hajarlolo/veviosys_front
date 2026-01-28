@@ -15,10 +15,17 @@ export class AuthService {
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
-    this.isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  
+    const userStr = this.isBrowser ? localStorage.getItem('currentUser') : null;
+    const token = this.isBrowser ? localStorage.getItem('authToken') : null;
+  
+    this.currentUserSubject = new BehaviorSubject<any>(userStr ? JSON.parse(userStr) : null);
+    this.currentUser$ = this.currentUserSubject.asObservable();
+  
+    this.isLoggedInSubject = new BehaviorSubject<boolean>(!!token);
     this.isLoggedIn$ = this.isLoggedInSubject.asObservable();
   }
-
+  
 
   private hasToken(): boolean {
     return this.isBrowser ? !!localStorage.getItem('authToken') : false;
@@ -53,8 +60,8 @@ export class AuthService {
           this.currentUserSubject.next(user);
           this.isLoggedInSubject.next(true);
         } else {
-           console.error('Login failed: User object or ID missing from backend response. Ensure backend /api/auth/login returns User object.');
-           // Handle login failure or incomplete data scenario
+          console.error('Login failed: User object or ID missing from backend response. Ensure backend /api/auth/login returns User object.');
+          // Handle login failure or incomplete data scenario
         }
       })
     );
@@ -72,7 +79,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
+    return this.http.post(`${this.apiUrl}/logout`, {}, { responseType: 'text' }).pipe(
       tap(() => {
         if (this.isBrowser) {
           localStorage.removeItem('authToken');
@@ -83,6 +90,7 @@ export class AuthService {
       })
     );
   }
+
 
 
   getAllUsers(): Observable<any[]> {

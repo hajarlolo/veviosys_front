@@ -119,80 +119,47 @@ export class ProfileComponent implements OnInit {
     }
 
 
-
     updateProfile(): void {
-
-        const userToUpdate = {
-
-            ...this.userData,
-
-            password: this.userData.motDePasse, // Map motDePasse to password for backend
-
-            profil: this.userData.profil // On mappe 'photo' vers 'profil'
-
-
-
-        };
-
-
-
-        if (this.userData.id) {
-
-            this.authService.updateUser(this.userData.id, userToUpdate).subscribe({
-
-                next: (res) => {
-
-                    console.log('Profile updated successfully:', res);
-
-                    alert('Profil mis à jour avec succès !');
-
-                },
-
-                error: (err) => {
-
-                    console.error('Error updating profile:', err);
-
-                    alert('Erreur lors de la mise à jour du profil.');
-
-                }
-
-            });
-
+        const formData = new FormData();
+      
+        formData.append('nom', this.userData.nom);
+        formData.append('prenom', this.userData.prenom);
+        formData.append('email', this.userData.email);
+        formData.append('telephone', this.userData.telephone);
+        formData.append('adresse', this.userData.adresse);
+        formData.append('ville', this.userData.ville);
+        formData.append('pays', this.userData.pays);
+        formData.append('cin', this.userData.cin);
+        formData.append('password', this.userData.motDePasse || '');
+      
+        if (this.userData.selectedFile) {
+          formData.append('photo', this.userData.selectedFile);
         }
+      
+        this.authService.updateUser(this.userData.id, formData).subscribe({
+          next: () => alert("Profil mis à jour ✅"),
+          error: err => console.error("Erreur update", err)
+        });
+      }
 
-    }
-
-
-
-    onPhotoSelected(event: any): void {
-
+      onPhotoSelected(event: any): void {
         const file = event.target.files[0];
-
-        if (file) {
-
-            const reader = new FileReader();
-
-            reader.onload = (e: any) => {
-
-                this.userData.photo = e.target.result;
-
-            };
-
-            reader.readAsDataURL(file);
-
-        }
-
+        if (!file) return;
+    
+        this.userData.selectedFile = file;
+    
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            // preview côté frontend
+            this.userData.photo = e.target.result; 
+        };
+        reader.readAsDataURL(file);
     }
-
-
-
-    // Dans profile.ts et header.ts
-
-    getPhotoUrl(path: any, name?: string): string {
-
-        return this.authService.getPhotoUrl(path, name);
-
-    }
+      
+      getPhotoUrl(filename: string) {
+        if (!filename) return 'assets/default-profile.png';
+        return `http://localhost:8080/uploads/users/${filename}`;
+      }
 
 }
 

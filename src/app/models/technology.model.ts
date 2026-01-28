@@ -6,3 +6,8 @@ export interface Technology {
   disponible: boolean;
   photo?: string;
 }
+
+
+
+
+

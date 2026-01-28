@@ -45,9 +45,7 @@
             <div class="info-right">
                 <div class="profile-photo-section">
                     <div class="photo-container">
-                        <img *ngIf="userData.photo"
-                            [src]="getPhotoUrl(userData.photo, userData.prenom + ' ' + userData.nom)" alt="Profile"
-                            class="profile-photo">
+                        <img *ngIf="userData.photo" [src]="getPhotoUrl(userData.photo)" alt="Profile" class="profile-photo">
                         <div *ngIf="!userData.photo" class="photo-placeholder">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">

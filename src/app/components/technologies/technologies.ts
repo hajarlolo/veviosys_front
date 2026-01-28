@@ -17,6 +17,8 @@ export class TechnologiesComponent implements OnInit {
   showModal = false;
   editingId: number | null = null;
   filterStatus = 'Toute';
+  selectedFile: File | null = null; // ✅ Fichier sélectionné
+  photoPreview: string | null = null;
   
   newTechnology: Technology = {
     nom: '',
@@ -30,7 +32,29 @@ export class TechnologiesComponent implements OnInit {
   ngOnInit(): void {
     this.loadTechnologies();
   }
-
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    if (!file.type.startsWith('image/')) {
+      alert('Veuillez sélectionner une image valide');
+      return;
+    }
+  
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La taille de l\'image ne doit pas dépasser 5MB');
+      return;
+    }
+  
+    this.selectedFile = file;
+  
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.photoPreview = e.target.result;
+      this.newTechnology.photo = e.target.result; // base64
+    };
+    reader.readAsDataURL(file);
+  }
   loadTechnologies(): void {
     this.technologyService.getTechnologies().subscribe({
       next: (data) => {
@@ -73,13 +97,19 @@ export class TechnologiesComponent implements OnInit {
       nom: '',
       description: '',
       prix: 0,
-      disponible: true
+      disponible: true,
+      photo: ''
     };
+  
+    this.selectedFile = null;
+    this.photoPreview = null;
   }
 
   editTechnology(technology: Technology): void {
     this.newTechnology = { ...technology };
     this.editingId = technology.id || null;
+  
+    this.photoPreview = technology.photo || null; 
     this.showModal = true;
   }
 
